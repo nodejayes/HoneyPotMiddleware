@@ -1,0 +1,25 @@
+{
+  "name": "honey-pot-middleware",
+  "version": "1.0.0",
+  "description": "a Middleware for NodeJs Server to block Spammers Dictionary Attackers an Robots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodejayes/HoneyPotMiddleware.git"
+  },
+  "keywords": [
+    "security",
+    "express",
+    "projecthoneypot",
+    "middleware"
+  ],
+  "author": "Markus Gilg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nodejayes/HoneyPotMiddleware/issues"
+  },
+  "homepage": "https://github.com/nodejayes/HoneyPotMiddleware#readme"
+}

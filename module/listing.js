@@ -1,0 +1,151 @@
+var fs        = require("fs");
+var os        = require("os");
+var path      = require("path");
+var blacklist = null;
+var whitelist = null;
+var maxtime   = 0;
+var bltmp     = [];
+var wltmp     = [];
+
+function createFolderIfNotExists (p) {
+  var dir = path.dirname(p);
+  if (fs.existsSync(dir)) {
+    return;
+  }
+  try {
+    fs.makeDirSync(dir);
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      createFolderIfNotExists(path.dirname(dir));
+      createFolderIfNotExists(dir);
+    }
+  }
+}
+
+function createFileIfNotExists (p, mode) {
+  for (var i in p) {
+    createFolderIfNotExists(p[i]);
+    fs.writeFileSync(p[i], "", {"flag": mode});
+  }
+}
+
+function find (type, ip) {
+  switch (type) {
+    case "W":
+
+      break;
+    default:
+
+  }
+}
+
+function addList (type, ip) {
+  switch (type) {
+    case "W":
+
+      break;
+    default:
+
+  }
+}
+
+function removeList (type, ip) {
+  switch (type) {
+    case "W":
+
+      break;
+    default:
+
+  }
+}
+
+// Sync File Content to Memory
+function reloadList (type) {
+  switch (type) {
+    case "W":
+      createFileIfNotExists(whitelist);
+      wltmp = fs.readFileSync(whitelist).split(os.EOL);
+      break;
+    default:
+      createFileIfNotExists(blacklist);
+      bltmp = fs.readFileSync(blacklist).split(os.EOL);
+  }
+}
+
+// Sync Memory to File
+function writeList (type) {
+  switch (type) {
+    case "W":
+      createFileIfNotExists(whitelist);
+      fs.writeFileSync(whitelist, wltmp.join(os.EOL));
+      break;
+    default:
+      createFileIfNotExists(blacklist);
+      fs.writeFileSync(blacklist, bltmp.join(os.EOL));
+  }
+}
+
+// Clear Old Entrys of Blacklist and Whitelist
+function clear () {
+  reloadList("W");
+  clearList(wltmp);
+  writeList("w");
+
+  reloadList("B");
+  clearList(bltmp);
+  writeList("B");
+}
+
+function clearList (list) {
+  for (var i in list) {
+    var line = list[i].split("|");
+    if (line.length !== 2 || isNaN(parseInt(line[2]))) {
+      continue;
+    }
+    var diff = new Date().getTime() - parseInt(line[2]);
+    if (diff > maxtime) {
+      list.splice(i, 1);
+    }
+  }
+}
+
+var LISTING = function (cfg) {
+  blacklist = cfg.blacklistpath;
+  whitelist = cfg.whitelistpath;
+  maxtime   = ((cfg.maxtimeonlist * 60) * 60) * 1000;
+
+  // create whitelist/blacklist file
+  createFileIfNotExists([blacklist, whitelist], "a");
+
+  return {
+    "findBlacklist": function (ip) {
+      return find("B", ip);
+    },
+    "findWhitelist": function (ip) {
+      return find("W", ip);
+    },
+    "addBlacklist": function (ip) {
+      addList("B", ip);
+    },
+    "addWhitelist": function (ip) {
+      addList("W", ip);
+    },
+    "removeBlacklist": function (ip) {
+      removeList("B", ip);
+    },
+    "removeWhitelist": function (ip) {
+      removeList("W", ip);
+    },
+    "reloadBlacklist": function () {
+
+    },
+    "reloadWhitelist": function () {
+
+    },
+    "clearLists": function () {
+      clear();
+    }
+  }
+}
+
+module.exports = LISTING;
