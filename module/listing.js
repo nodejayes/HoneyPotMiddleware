@@ -23,7 +23,7 @@ function createFolderIfNotExists (p) {
 }
 
 function createFileIfNotExists (p, mode) {
-  for (var i in p) {
+  for (var i in p.split(path.sep)) {
     createFolderIfNotExists(p[i]);
     fs.writeFileSync(p[i], "", {"flag": mode});
   }
