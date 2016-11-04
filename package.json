@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/nodejayes/HoneyPotMiddleware/issues"
   },
-  "homepage": "https://github.com/nodejayes/HoneyPotMiddleware#readme"
+  "homepage": "https://github.com/nodejayes/HoneyPotMiddleware#readme",
+  "devDependencies": {
+    "express": "4.14.0"
+  }
 }

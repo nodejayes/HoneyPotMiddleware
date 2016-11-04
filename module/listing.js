@@ -30,33 +30,64 @@ function createFileIfNotExists (p, mode) {
 }
 
 function find (type, ip) {
+  clear();
   switch (type) {
     case "W":
-
+      for (var i in wltmp) {
+        var tmp = wltmp[i].split("|");
+        if (tmp[0] === ip) {
+          return {
+            "idx": i,
+            "obj": wltmp[i]
+          };
+        }
+      }
+      return null;
       break;
     default:
-
+      for (var i in bltmp) {
+        var tmp = bltmp[i].split("|");
+        if (tmp[0] === ip) {
+          return {
+            "idx": i,
+            "obj": bltmp[i]
+          };
+        }
+      }
+      return null;
   }
 }
 
 function addList (type, ip) {
+  clear(type);
+  if (find(type, ip) !== null) {
+    return;
+  }
+  var entry = ip + "|" + new Date().getTime();
   switch (type) {
     case "W":
-
+      wltmp.push(entry);
       break;
     default:
-
+      bltmp.push(entry);
   }
+  writeList(type);
 }
 
 function removeList (type, ip) {
+  clear(type);
+  var found = find(type, ip);
+  if (found === null) {
+    return;
+  }
   switch (type) {
     case "W":
-
+      wltmp.splice(found, 1);
       break;
     default:
-
+      bltmp.splice(found, 1);
   }
+  writeList(type);
 }
 
 // Sync File Content to Memory
@@ -89,7 +120,7 @@ function writeList (type) {
 function clear () {
   reloadList("W");
   clearList(wltmp);
-  writeList("w");
+  writeList("W");
 
   reloadList("B");
   clearList(bltmp);
@@ -137,10 +168,10 @@ var LISTING = function (cfg) {
       removeList("W", ip);
     },
     "reloadBlacklist": function () {
-
+      reloadList("B");
     },
     "reloadWhitelist": function () {
-
+      reloadList("W");
     },
     "clearLists": function () {
       clear();
