@@ -43,10 +43,6 @@ var DNS = function (cfg, addr, cb) {
     }
   });
 
-  req.on("end", function () {
-    console.log("finish");
-  });
-
   req.send();
 };
 
