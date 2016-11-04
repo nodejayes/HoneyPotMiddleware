@@ -3,7 +3,6 @@ var checker = require("./module/checker");
 
 function checkAddress (addr, next, res) {
   checker(config).check(addr, function (result) {
-    console.log(result);
     if (result === null) {
       next();
     } else {

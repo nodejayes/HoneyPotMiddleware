@@ -13,7 +13,7 @@ var CHECKER = function (cfg) {
         cb(item.obj);
       }
       if (item === null) {
-        dnsreq(addr, function (result) {
+        dnsreq(cfg, addr, function (result) {
           if (result === null) {
             list.addWhitelist(addr);
           } else {

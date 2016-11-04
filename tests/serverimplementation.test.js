@@ -13,7 +13,7 @@ var app     = express(http);
 app.use(mod.checkRequest);
 
 app.get("/", function (req, res) {
-  req.send("Youre are checked positive!");
+  res.send("Youre are checked positive!");
 });
 
 app.listen(8085, "127.0.0.1", function () {
