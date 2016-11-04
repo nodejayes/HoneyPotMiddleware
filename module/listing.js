@@ -23,9 +23,18 @@ function createFolderIfNotExists (p) {
 }
 
 function createFileIfNotExists (p, mode) {
-  for (var i in p.split(path.sep)) {
-    createFolderIfNotExists(p[i]);
-    fs.writeFileSync(p[i], "", {"flag": mode});
+  if (typeof p === typeof []) {
+    for (var i in p) {
+      if (path.dirname(p[i]) !== ".") {
+        createFolderIfNotExists(path.dirname(p[i]));
+      }
+      fs.writeFileSync(p[i], "", {"flag": mode});
+    }
+  } else if (typeof p === typeof "") {
+    if (path.dirname(p) !== ".") {
+      createFolderIfNotExists(path.dirname(p));
+    }
+    fs.writeFileSync(p, "", {"flag": mode});
   }
 }
 
@@ -95,11 +104,11 @@ function reloadList (type) {
   switch (type) {
     case "W":
       createFileIfNotExists(whitelist);
-      wltmp = fs.readFileSync(whitelist).split(os.EOL);
+      wltmp = fs.readFileSync(whitelist).toString("utf-8").split(os.EOL);
       break;
     default:
       createFileIfNotExists(blacklist);
-      bltmp = fs.readFileSync(blacklist).split(os.EOL);
+      bltmp = fs.readFileSync(blacklist).toString("utf-8").split(os.EOL);
   }
 }
 
